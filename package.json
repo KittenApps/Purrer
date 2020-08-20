@@ -15,7 +15,7 @@
     "mongodb": "^3.5.9",
     "webpack": "^4.44.1",
     "html-webpack-plugin": "^4.3.0",
-    "compression-webpack-plugin": "^4.0.1",
+    "compression-webpack-plugin": "^5.0.0",
     "babel-loader": "^8.1.0",
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
@@ -27,7 +27,8 @@
     "@material-ui/lab": "^5.0.0-alpha.6",
     "react-window": "^1.8.5",
     "react-virtualized-auto-sizer": "^1.0.2",
-    "idb": "^5.0.4"
+    "idb": "^5.0.4",
+    "realm-web": "^0.8.1"
   },
   "engines": {
     "node": "12.x"

@@ -26,9 +26,9 @@ MongoClient.connect(
     "?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true"
 )
   .then(client => {
-    const subcol = client.db("test").collection("subscriptions");
+    const subcol = client.db(process.env.MONGODB_DBNAME).collection("subscriptions");
 
-    app.post("/register", (req, res) => {
+    /*app.post("/register", (req, res) => {
       let subscriptions = req.body.subscription;
       const channel = req.body.channel;
       const ECDHpublicKey = req.body.ECDHpublicKey;
@@ -69,7 +69,7 @@ MongoClient.connect(
           }
         })
         .catch(console.error);
-    });
+    });*/
 
     const URLregex = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
 
@@ -91,9 +91,10 @@ MongoClient.connect(
       console.log("send notification with payload:", payload);
       subcol.find({ channels: req.body.channel })
         .map(sub =>
-          webPush.sendNotification(sub, JSON.stringify(payload)).catch(() => {
+          webPush.sendNotification(sub, JSON.stringify(payload)).catch((err) => {
+            console.log(err);
             console.log("removed expired subscription: ", sub);
-            return subcol.deleteOne({ endpoint: sub.endpoint });
+            return subcol.deleteOne({ _id: sub._id });
           })
         )
         .toArray()
@@ -114,7 +115,7 @@ MongoClient.connect(
             .sendNotification(sub, JSON.stringify(payloads[sub._id]))
             .catch(() => {
               console.log("removed expired subscription: ", sub);
-              return subcol.deleteOne({ endpoint: sub.endpoint });
+              return subcol.deleteOne({ _id: sub._id });
             });
         })
         .toArray()
@@ -126,16 +127,16 @@ MongoClient.connect(
         });
     });
 
-    app.post("/getSubscriptions", (req, res) =>
+    /*app.post("/getSubscriptions", (req, res) =>
       subcol
         .find({ channels: req.body.channel })
         .project({ ECDHpublicKey: 1 })
         .toArray()
         .then(subs => res.json(subs))
         .catch(console.error)
-    );
+    );*/
 
-    app.post("/getSubscribedChannels", (req, res) =>
+    /*app.post("/getSubscribedChannels", (req, res) =>
       subcol
         .findOne(
           { endpoint: req.body.endpoint },
@@ -146,7 +147,7 @@ MongoClient.connect(
           res.json({ channels: sub.channels });
         })
         .catch(console.error)
-    );
+    );*/
 
     // serve index.html for everything else
     app.get("/*", (req, res) => {

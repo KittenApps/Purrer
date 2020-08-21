@@ -94,8 +94,9 @@ function KittenPush() {
       as += ", [" + actions[1].title + "](" + actions[1].url + ")";
     setActions(as);
   }, []);
-  
+
   const [publicKey, setPublicKey] = useState(null);
+  const [subscribed, setSubscribed] = useState(null);
 
   const classes = useStyles();
 
@@ -107,6 +108,8 @@ function KittenPush() {
         channel={channel}
         setChannel={setChannel}
         setPublicKey={setPublicKey}
+        subscribed={subscribed}
+        setSubscribed={setSubscribed}
       />
       <main className={classes.main}>
         <Paper className={classes.paper}>
@@ -173,6 +176,7 @@ function KittenPush() {
                 setActions={setActions}
                 publicKey={publicKey}
                 setPublicKey={setPublicKey}
+                subscribed={subscribed}
               />
             </React.Suspense>
           </div>

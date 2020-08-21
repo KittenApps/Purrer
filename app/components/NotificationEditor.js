@@ -14,6 +14,7 @@ import EnhancedEncryptionTwoToneIcon from "@material-ui/icons/EnhancedEncryption
 import NoEncryptionTwoToneIcon from "@material-ui/icons/NoEncryptionTwoTone";
 import NotificationPreview from "./NotificationPreview";
 import { getIdb } from "../util";
+import { getRealm } from "../realm";
 
 const URLregex = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
 const actionsRegex = /^\[([\w\s]*)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\)(,\s\[([\w\s]*)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\))?$/;
@@ -60,21 +61,23 @@ function NotificationEditor(props) {
       .then(db => db.get("settings", "ECDHkeys"))
       .then(k => k && props.setPublicKey(k.publicKey));
   }, []);
-  
+
   useEffect(() => {
     if (props.publicKey === null) setE2ee(false);
-  }, [props.publicKey])
+  }, [props.publicKey]);
 
   useEffect(() => {
     setChannelSubs(null);
-    fetch("./getSubscriptions", {
-      method: "post",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ channel: props.channel })
-    })
-      .then(r => r.json())
-      .then(subs => setChannelSubs(subs));
-  }, [props.channel]);
+    getRealm()
+      .then(({ subsColl }) =>
+        subsColl.find(
+          { channels: props.channel },
+          { projection: { ECDHpublicKey: 1 } }
+        )
+      )
+      .then(subs => setChannelSubs(subs))
+      .catch(console.error);
+  }, [props.channel, props.subscribed]);
 
   const handleSend = () => {
     let payload = {

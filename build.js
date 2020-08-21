@@ -5,7 +5,7 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 
-const env = true ? "development" : "production";
+const env = false ? "development" : "production";
 
 function createPublicHash() {
   const files = fs.readdirSync(path.join(__dirname, "public"));

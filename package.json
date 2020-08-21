@@ -4,8 +4,7 @@
   "description": "A simple thing.",
   "main": "server.js",
   "scripts": {
-    "start": "node build.js && node server.js",
-    "webpack": "webpack"
+    "start": "node build.js && node server.js"
   },
   "dependencies": {
     "express": "^4.17.1",

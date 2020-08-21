@@ -14,6 +14,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import InvertColorsTwoToneIcon from "@material-ui/icons/InvertColorsTwoTone";
 import { getIdb } from "../util";
+import { getRealm } from "../realm";
 const ThemeEditor = React.lazy(() =>
   import(/* webpackChunkName: "themeEditor" */ "./ThemeEditor")
 );
@@ -130,108 +131,142 @@ function KittenHeader(props) {
   }, [props.channel]);
 
   // handle subscribtion switch presses
-  const [subscribed, setSubscribed] = useState(null);
-  const handleSubscription = e => {
-    const toSubscribe = e.target.checked;
-    navigator.serviceWorker.ready
-      .then(reg => {
-        const crypto = window.crypto.subtle;
-        const getPublicKey = () =>
-          getIdb().then(db => {
-            return db.get("settings", "ECDHkeys").then(k => {
-              if (k) return k.publicKey;
-              return crypto
-                .generateKey({ name: "ECDH", namedCurve: "P-256" }, true, [
-                  "deriveKey"
-                ])
-                .then(key => {
-                  return Promise.all([
-                    crypto.exportKey("jwk", key.publicKey),
-                    crypto.exportKey("jwk", key.privateKey)
-                  ]).then(([pub, priv]) => {
-                    props.setPublicKey(pub);
-                    return db
-                      .add("settings", {
-                        id: "ECDHkeys",
-                        publicKey: pub,
-                        privateKey: priv
-                      })
-                      .then(() => pub);
-                  });
-                });
-            });
-          });
-        const removeKeys = () =>
-          getIdb()
-            .then(db => db.delete("settings", "ECDHkeys"))
-            .then(() => props.setPublicKey(null));
-        return Promise.all([
-          reg.pushManager.getSubscription().then(sub => {
-            if (sub) {
-              if (!toSubscribe) {
-                if (subChannels.size > 1 || !subChannels.has(channel))
-                  return sub;
-                return sub.unsubscribe().then(() => sub);
-              }
-              return sub;
-            }
-            const convertedVapidKey = urlBase64ToUint8Array(
-              process.env.VAPID_PUBLIC_KEY
-            );
 
-            return reg.pushManager.subscribe({
-              userVisibleOnly: true,
-              applicationServerKey: convertedVapidKey
+  const handleSubscription = useCallback(
+    e => {
+      const toSubscribe = e.target.checked;
+      navigator.serviceWorker.ready
+        .then(reg => {
+          const crypto = window.crypto.subtle;
+          const getPublicKey = () =>
+            getIdb().then(db => {
+              return db.get("settings", "ECDHkeys").then(k => {
+                if (k) return k.publicKey;
+                return crypto
+                  .generateKey({ name: "ECDH", namedCurve: "P-256" }, true, [
+                    "deriveKey"
+                  ])
+                  .then(key => {
+                    return Promise.all([
+                      crypto.exportKey("jwk", key.publicKey),
+                      crypto.exportKey("jwk", key.privateKey)
+                    ]).then(([pub, priv]) => {
+                      props.setPublicKey(pub);
+                      return db
+                        .add("settings", {
+                          id: "ECDHkeys",
+                          publicKey: pub,
+                          privateKey: priv
+                        })
+                        .then(() => pub);
+                    });
+                  });
+              });
             });
-          }),
-          toSubscribe
-            ? getPublicKey()
-            : subChannels.size === 1 || subChannels.has(channel)
-            ? removeKeys()
-            : Promise.resolve("")
-        ]);
-      })
-      .then(([subscription, jwk]) => {
-        let json = { subscription, channel: channel };
-        if (toSubscribe) json.ECDHpublicKey = jwk;
-        return fetch(toSubscribe ? "./register" : "./unregister", {
-          method: "post",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify(json)
-        });
-      })
-      .then(() => {
-        if (toSubscribe) {
-          setSubChannels(sc => new Set(sc).add(channel));
-        } else {
-          setSubChannels(sc => {
-            const s = new Set(subChannels);
-            s.delete(channel);
-            return s;
-          });
-        }
-        setSubscribed(toSubscribe);
-      });
-  };
+          const removeKeys = () =>
+            getIdb()
+              .then(db => db.delete("settings", "ECDHkeys"))
+              .then(() => props.setPublicKey(null));
+          return Promise.all([
+            reg.pushManager.getSubscription().then(sub => {
+              if (sub) {
+                if (!toSubscribe) {
+                  if (subChannels.size > 1 || !subChannels.has(channel))
+                    return sub;
+                  return sub.unsubscribe().then(() => sub);
+                }
+                return sub;
+              }
+              const convertedVapidKey = urlBase64ToUint8Array(
+                "BFBbVJa8tEiwnFdqvAOCahoaQ-YIpwseleKM8Yjp3LA9WadwzpIyvcqsW2FbpHvHznh5fZ1MUUblDJPtMxc7Uu4"
+              );
+
+              return reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: convertedVapidKey
+              });
+            }),
+            toSubscribe
+              ? getPublicKey()
+              : subChannels.size === 1 || subChannels.has(channel)
+              ? removeKeys()
+              : Promise.resolve("")
+          ]);
+        })
+        .then(([subscription, jwk]) => {
+          if (toSubscribe) {
+            const sub = subscription.toJSON();
+            // register
+            return getRealm()
+              .then(({ subsColl, user }) =>
+                subsColl.updateOne(
+                  { user_id: user.id },
+                  {
+                    $addToSet: { channels: channel },
+                    $set: { ECDHpublicKey: jwk},
+                    $setOnInsert: {
+                      keys: sub.keys,
+                      endpoint: sub.endpoint
+                    }
+                  },
+                  { upsert: true }
+                )
+              )
+              .then(() => setSubChannels(sc => new Set(sc).add(channel)));
+          } else {
+            // unregister
+            return getRealm().then(({ subsColl, user }) =>
+              subsColl
+                .findOneAndUpdate(
+                  { user_id: user.id },
+                  { $pull: { channels: channel } }
+                )
+                .then(sub => {
+                  if (
+                    sub !== null &&
+                    sub.channels.length === 1 &&
+                    sub.channels[0] === channel
+                  ) {
+                    return subsColl.deleteOne({ _id: sub._id });
+                  }
+                })
+                .then(() => {
+                  setSubChannels(sc => {
+                    const s = new Set(subChannels);
+                    s.delete(channel);
+                    return s;
+                  });
+                })
+            );
+          }
+        })
+        .then(() => props.setSubscribed(toSubscribe))
+        .catch(console.error);
+    },
+    [channel, subChannels]
+  );
 
   // get inital subscribtion status after changeing channel
   useEffect(() => {
     navigator.serviceWorker.ready
       .then(reg => reg.pushManager.getSubscription())
       .then(sub => {
-        if (sub === null) return setSubscribed(false);
+        if (sub === null) return props.setSubscribed(false);
         if (subChannels !== null)
-          return setSubscribed(subChannels.has(channel));
-        return fetch("./getSubscribedChannels", {
-          method: "post",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify({ endpoint: sub.endpoint })
-        })
-          .then(r => r.json())
-          .then(r => {
-            setSubChannels(new Set(r.channels));
-            setSubscribed(r.channels.includes(channel));
-          });
+          return props.setSubscribed(subChannels.has(channel));
+        return getRealm()
+          .then(({ subsColl, user }) =>
+            subsColl.findOne(
+              { user_id: user.id },
+              { projection: { channels: 1 } }
+            )
+          )
+          .then(sub => {
+            const channels = sub ? sub.channels : [];
+            setSubChannels(new Set(channels));
+            props.setSubscribed(channels.includes(channel));
+          })
+          .catch(console.error);
       });
   }, [channel, subChannels]);
 
@@ -301,8 +336,8 @@ function KittenHeader(props) {
               control={
                 <Switch
                   color="secondary"
-                  checked={subscribed || false}
-                  disabled={subscribed === null}
+                  checked={props.subscribed || false}
+                  disabled={props.subscribed === null}
                   onChange={handleSubscription}
                 />
               }

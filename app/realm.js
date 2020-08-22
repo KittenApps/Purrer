@@ -6,7 +6,7 @@ export function getRealm() {
   if (realm) return Promise.resolve(realm);
   const app = new Realm.App({ id: "purrer-rwqdl", timeout: 1000 });
   const getUser = app.currentUser
-    ? Promise.resolve(app.currentUser)
+    ? app.currentUser.refreshCustomData().then(() => app.currentUser)
     : app.logIn(Realm.Credentials.anonymous());
 
   return getUser.then(user => {

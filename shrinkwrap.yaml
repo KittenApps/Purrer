@@ -7,7 +7,7 @@ dependencies:
   '@material-ui/lab': 5.0.0-alpha.6
   babel-loader: 8.1.0
   body-parser: 1.19.0
-  compression-webpack-plugin: 5.0.0
+  compression-webpack-plugin: 5.0.1
   express: 4.17.1
   express-static-gzip: 2.0.7
   html-webpack-plugin: 4.3.0
@@ -1349,7 +1349,7 @@ packages:
       node: '>= 6.0.0'
     resolution:
       integrity: sha512-01q25QQDwLSsyfhrKbn8yuur+JNw0H+0Y4JiGIKd3z9aYk/w/2kxD/Upc+t2ZBBSUNff50VjPsSW2YxM8QYKVg==
-  /aggregate-error/3.0.1:
+  /aggregate-error/3.1.0:
     dependencies:
       clean-stack: 2.2.0
       indent-string: 4.0.0
@@ -1357,7 +1357,7 @@ packages:
     engines:
       node: '>=8'
     resolution:
-      integrity: sha512-quoaXsZ9/BLNae5yiNoUz+Nhkwz83GhWwtYFglcjEQB2NDHCIpApbqXxIFnm4Pq/Nvhrsq5sYJFyohrrxnTGAA==
+      integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==
   /ajv-errors/1.0.1/ajv@6.12.3:
     dependencies:
       ajv: 6.12.3
@@ -1958,7 +1958,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==
-  /compression-webpack-plugin/5.0.0:
+  /compression-webpack-plugin/5.0.1:
     dependencies:
       cacache: 15.0.5
       find-cache-dir: 3.3.1
@@ -1971,7 +1971,7 @@ packages:
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
     resolution:
-      integrity: sha512-7igJXv3WgdLpAr+ix4Q0jbnyL43c2kpxhvGXxpP1aQ+Am4zLngU8GoemPZh22OmDCNJ73/DUwV+uumIdp2ltmA==
+      integrity: sha512-Wcb99O4UkdDZiM+blEw6h+cUfJYCn2kgK0l3fjLOm72Stso9DVMieQpBD4PVpyI7DLL6+zNh0iJV3p4HDwTinQ==
   /concat-map/0.0.1:
     dev: false
     resolution:
@@ -3921,7 +3921,7 @@ packages:
       integrity: sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A==
   /p-map/4.0.0:
     dependencies:
-      aggregate-error: 3.0.1
+      aggregate-error: 3.1.0
     dev: false
     engines:
       node: '>=10'
@@ -5178,7 +5178,7 @@ specifiers:
   '@material-ui/lab': ^5.0.0-alpha.6
   babel-loader: ^8.1.0
   body-parser: ^1.19.0
-  compression-webpack-plugin: ^5.0.0
+  compression-webpack-plugin: ^5.0.1
   express: ^4.17.1
   express-static-gzip: ^2.0.7
   html-webpack-plugin: ^4.3.0

@@ -91,7 +91,8 @@ MongoClient.connect(
       console.log("send notification with payload:", payload);
       subcol.find({ channels: req.body.channel })
         .map(sub =>
-          webPush.sendNotification(sub, JSON.stringify(payload)).catch(() => {
+          webPush.sendNotification(sub, JSON.stringify(payload)).catch((err) => {
+            console.log(err);
             console.log("removed expired subscription: ", sub);
             return subcol.deleteOne({ _id: sub._id });
           })

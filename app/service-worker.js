@@ -63,8 +63,7 @@ self.addEventListener("push", event => {
         vibrate: [200, 100, 200, 100, 100, 50, 100, 50, 200]
       };
       if (payload.actions) {
-        const icon =
-          "https://cdn.glitch.com/b4e27fdf-cea7-4879-91d5-ab40d3ab44d6%2Flink.png";
+        const icon = "http://purrer.netlify.app/link.png";
         let acts = [{ action: "Btn1", title: payload.actions[0].title, icon }];
         let d = { Btn1: payload.actions[0].url };
         if (payload.actions.length > 1) {

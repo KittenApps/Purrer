@@ -1,0 +1,14 @@
+[build]
+    publish = "public"
+    command = "yarn build"
+    functions = "functions/"
+
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
+
+[[headers]]
+    for = "/service-worker.js"
+    [headers.values]
+        cache-control = 'no-cache'

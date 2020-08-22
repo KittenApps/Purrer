@@ -159,14 +159,14 @@ function NotificationEditor(props) {
             };
             return p;
           }, {});
-          return fetch("./sendE2EENotification", {
+          return fetch("/.netlify/functions/sendE2EENotification", {
             method: "post",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ payloads, channel })
           });
         });
     } else {
-      fetch("./sendNotification", {
+      fetch("/.netlify/functions/sendNotification", {
         method: "post",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(payload)

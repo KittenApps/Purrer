@@ -65,7 +65,7 @@ function NotificationPreview(props) {
 
   const channel = props.channel
     ? "in #" + props.channel
-    : "kitten-push.glitch.me";
+    : "purrer.netlify.app";
 
   const hcolor = {
     backgroundColor:

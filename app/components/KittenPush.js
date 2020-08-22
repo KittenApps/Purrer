@@ -75,11 +75,9 @@ function KittenPush() {
   }, [theme]);
 
   // maybe I should have used Redux
-  const [title, setTitle] = useState("Kitten MotD");
-  const [body, setBody] = useState("You're my super amazing kitten 💚");
-  const [icon, setIcon] = useState(
-    "https://cdn.glitch.com/project-avatar/537ecdf0-1261-4aff-943f-8e76988ab888.png"
-  );
+  const [title, setTitle] = useState("Have a meowtastic day! 😺");
+  const [body, setBody] = useState("Hello from the purrfect kitten web push notification service!");
+  const [icon, setIcon] = useState("https://i.redd.it/z60yhns8wmt41.jpg");
   const [image, setImage] = useState("https://i.imgur.com/feGnF.jpg");
   const [actions, setActions] = useState("");
 

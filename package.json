@@ -1,20 +1,13 @@
 {
-  "name": "kitten-motd",
-  "version": "0.1.0",
-  "description": "A simple thing.",
-  "main": "server.js",
+  "name": "Purrer",
+  "version": "1.0.0",
+  "description": "A simple service worker based web push notification service.",
   "scripts": {
-    "start": "node build.js && node server.js"
+    "build": "node build.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "express-static-gzip": "^2.0.7",
-    "body-parser": "^1.19.0",
-    "web-push": "^3.4.4",
-    "mongodb": "^3.5.9",
     "webpack": "^4.44.1",
     "html-webpack-plugin": "^4.3.0",
-    "compression-webpack-plugin": "^5.0.1",
     "babel-loader": "^8.1.0",
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
@@ -30,7 +23,7 @@
     "realm-web": "^0.8.1"
   },
   "engines": {
-    "node": "12.x"
+    "node": ">=12"
   },
   "browserslist": [
     ">1%",
@@ -40,12 +33,10 @@
   ],
   "webpackMode": "production",
   "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
+    "url": "https://github.com/KittenApps/Purrer"
   },
   "license": "MIT",
   "keywords": [
-    "node",
-    "glitch",
-    "express"
+    "web-push"
   ]
 }

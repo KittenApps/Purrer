@@ -178,7 +178,7 @@ function KittenHeader(props) {
                 return sub;
               }
               const convertedVapidKey = urlBase64ToUint8Array(
-                "BFBbVJa8tEiwnFdqvAOCahoaQ-YIpwseleKM8Yjp3LA9WadwzpIyvcqsW2FbpHvHznh5fZ1MUUblDJPtMxc7Uu4"
+                process.env.VAPID_PUBLIC_KEY
               );
 
               return reg.pushManager.subscribe({

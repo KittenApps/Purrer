@@ -3,6 +3,7 @@ const webPush = require("web-push");
 const { MongoClient } = require('mongodb');
 
 let subsColl = null;
+webPush.setVapidDetails("https://purrer.netlify.app/", process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
 
 function getSubsColl(){
   if (subsColl) return Promise.resolve(subsColl);
@@ -13,7 +14,7 @@ function getSubsColl(){
 }
 
 exports.handler = async function(event, context) {
-  webPush.setVapidDetails("https://purrer.netlify.app/", process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
+  context.callbackWaitsForEmptyEventLoop = false;
   const body = JSON.parse(event.body);
   const URLregex = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
   if (body.image && !URLregex.test(body.image))
@@ -25,14 +26,10 @@ exports.handler = async function(event, context) {
     return {statusCode: 400, body: "Invalid action buttons object!" };
   const payload = Object.assign({}, body, {timestamp: new Date().getTime()});
   console.log("send notification with payload:", payload);
-  return getSubsColl().then(subsColl =>
-    subsColl.find({ channels: body.channel })
-      .map(sub =>
-        webPush.sendNotification(sub, JSON.stringify(payload)).catch((err) => {
-          console.log("removed expired subscription: ", sub);
-          return subsColl.deleteOne({ _id: sub._id });
-        })
-      ).toArray())
-    .then(wps => Promise.all(wps))
-    .then(() => ({statusCode: 201, body: "Message send!" }));
+  const subsColl = await getSubsColl();
+  let promises = await subsColl.find({ channels: body.channel }).map(sub =>
+    webPush.sendNotification(sub, JSON.stringify(payload)).catch(() => subsColl.deleteOne({ _id: sub._id }))
+  ).toArray();
+  await Promise.all(promises);
+  return {statusCode: 201, body: "Message send!" };
 }

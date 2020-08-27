@@ -1,8 +1,9 @@
 "use strict";
 const webPush = require("web-push");
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 
 let subsColl = null;
+webPush.setVapidDetails("https://purrer.netlify.app/", process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
 
 function getSubsColl(){
   if (subsColl) return Promise.resolve(subsColl);
@@ -13,20 +14,13 @@ function getSubsColl(){
 }
 
 exports.handler = async function(event, context) {
-  webPush.setVapidDetails("https://purrer.netlify.app/", process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
+  context.callbackWaitsForEmptyEventLoop = false;
   const body = JSON.parse(event.body);
   const payloads = body.payloads;
-  return getSubsColl().then(subsColl =>
-    subsColl.find({ channels: body.channel })
-      .map(sub => {
-        if (!payloads[sub._id]) return Promise.resolve();
-        return webPush
-          .sendNotification(sub, JSON.stringify(payloads[sub._id]))
-          .catch(() => {
-            console.log("removed expired subscription: ", sub);
-            return subsColl.deleteOne({ _id: sub._id });
-          });
-      }).toArray())
-    .then(wps => Promise.all(wps))
-    .then(() => ({statusCode: 201, body: "Encrypted messages send!" }));
+  const subsColl = await getSubsColl();
+  let promises = await subsColl.find({ channels: body.channel }).map(sub => !payloads[sub._id] ? false :
+    webPush.sendNotification(sub, JSON.stringify(payloads[sub._id])).catch(() => subsColl.deleteOne({ _id: sub._id }))
+  ).toArray();
+  await Promise.all(promises);
+  return {statusCode: 201, body: "Encrypted messages send!" };
 }

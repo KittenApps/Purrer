@@ -2,3 +2,6 @@ public/*
 !public/robots.txt
 !public/link.png
 node_modules
+
+# Local Netlify folder
+.netlify

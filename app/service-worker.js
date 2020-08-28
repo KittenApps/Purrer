@@ -102,6 +102,8 @@ self.addEventListener("push", event => {
   );
 });
 
+self.addEventListener("push", console.log);
+
 // resubscripe when subscriptions is due to expiration
 self.addEventListener("pushsubscriptionchange", event =>
   event.waitUntil(
@@ -116,6 +118,8 @@ self.addEventListener("pushsubscriptionchange", event =>
     )*/
   )
 );
+
+self.addEventListener("pushsubscriptionchange", console.warn);
 
 self.addEventListener("notificationclick", event => {
   if (event.action === "Btn1" || event.action === "Btn2") {

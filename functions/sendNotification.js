@@ -28,7 +28,7 @@ exports.handler = async function(event, context) {
   console.log("send notification with payload:", payload);
   const subsColl = await getSubsColl();
   let promises = await subsColl.find({ channels: body.channel }).map(sub =>
-    webPush.sendNotification(sub, JSON.stringify(payload)).catch(() => subsColl.deleteOne({ _id: sub._id }))
+    webPush.sendNotification(sub, JSON.stringify(payload)).then(console.log).catch(() => subsColl.deleteOne({ _id: sub._id }))
   ).toArray();
   await Promise.all(promises);
   return {statusCode: 201, body: "Message send!" };

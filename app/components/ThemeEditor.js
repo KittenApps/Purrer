@@ -31,7 +31,7 @@ function CustomThemeDialog(props) {
       type: darkMode ? "dark" : "light"
     };
     getIdb()
-      .then(db => db.add("settings", { id: "defaultTheme", theme }))
+      .then(db => db.put("settings", { id: "defaultTheme", theme }))
       .then(() => {
         props.setTheme(createMuiTheme({ palette: theme }));
         props.setOpen(false);

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render } from "react-dom";
+import { unstable_createRoot } from "react-dom";
 import KittenPush from "./components/KittenPush";
 
 navigator.serviceWorker.register("service-worker.js").then(reg => reg.update());
@@ -21,8 +21,7 @@ class ErrorBoundary extends React.PureComponent {
           <h1>Oops, something went wrong! :(</h1>
           <p>
             <b>
-              Please give the following information to a hard working tech
-              kitten.
+              Please give the following information to a hard working tech kitten.
             </b>
           </p>
           <p>
@@ -40,9 +39,4 @@ class ErrorBoundary extends React.PureComponent {
   }
 }
 
-render(
-  <ErrorBoundary>
-    <KittenPush />
-  </ErrorBoundary>,
-  document.getElementById("main")
-);
+unstable_createRoot(document.getElementById("main")).render(<ErrorBoundary><KittenPush/></ErrorBoundary>);

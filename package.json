@@ -6,23 +6,23 @@
     "build": "node build.js"
   },
   "dependencies": {
-    "webpack": "^4.44.1",
-    "html-webpack-plugin": "^4.3.0",
-    "babel-loader": "^8.1.0",
-    "@babel/core": "^7.11.1",
-    "@babel/preset-env": "^7.11.0",
+    "@babel/core": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
+    "@material-ui/core": "^5.0.0-alpha.8",
+    "@material-ui/icons": "^5.0.0-alpha.7",
+    "@material-ui/lab": "^5.0.0-alpha.8",
+    "babel-loader": "^8.1.0",
+    "html-webpack-plugin": "^4.4.1",
+    "idb": "^5.0.4",
+    "mongodb": "^3.5.9",
     "react": "0.0.0-experimental-94c0244ba",
     "react-dom": "0.0.0-experimental-94c0244ba",
-    "@material-ui/core": "^5.0.0-alpha.6",
-    "@material-ui/icons": "^5.0.0-alpha.4",
-    "@material-ui/lab": "^5.0.0-alpha.6",
-    "react-window": "^1.8.5",
     "react-virtualized-auto-sizer": "^1.0.2",
-    "idb": "^5.0.4",
+    "react-window": "^1.8.5",
     "realm-web": "^0.8.1",
-    "mongodb": "^3.5.9",
-    "web-push": "^3.4.4"
+    "web-push": "^3.4.4",
+    "webpack": "^4.44.1"
   },
   "engines": {
     "node": ">=12"

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect, useMemo } from "react";
 import {
-  Badge,
+  Chip,
   Button,
   Checkbox,
   TextField,
@@ -17,11 +17,7 @@ import { getIdb } from "../util";
 import { getRealm } from "../realm";
 
 const URLregex = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
-const actionsRegex = /^\[([\w\s]*)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\)(,\s\[([\w\s]*)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\))?$/;
-
-const StyledBadge = withStyles(theme => ({
-  badge: { right: -15, top: 12 }
-}))(Badge);
+const actionsRegex = /^\[([\w\s]*)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\)(,?\s\[([\w\s]*)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\))?$/;
 
 function NotificationEditor(props) {
   const onChangeTitle = e => props.setTitle(e.target.value);
@@ -268,12 +264,8 @@ function NotificationEditor(props) {
             !channelSubs
           }
         >
-          <StyledBadge
-            color="secondary"
-            badgeContent={channelSubs === null ? "?" : channelSubs.length}
-          >
-            Send Notification to #{props.channel}
-          </StyledBadge>
+          Send Notification to #{props.channel}
+          <Chip color="secondary" label={channelSubs === null ? "?" : channelSubs.length} size="small" style={{marginLeft: 5}}/>
         </Button>
       </div>
       <Typography

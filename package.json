@@ -13,7 +13,7 @@
     "@material-ui/icons": "^5.0.0-alpha.7",
     "@material-ui/lab": "^5.0.0-alpha.10",
     "babel-loader": "^8.1.0",
-    "html-webpack-plugin": "^4.4.1",
+    "html-webpack-plugin": "^4.5.0",
     "idb": "^5.0.6",
     "mongodb": "^3.6.2",
     "react": "0.0.0-experimental-94c0244ba",
@@ -22,7 +22,7 @@
     "react-window": "^1.8.5",
     "realm-web": "^0.8.1",
     "web-push": "^3.4.4",
-    "webpack": "^4.44.1"
+    "webpack": "^4.44.2"
   },
   "engines": {
     "node": ">=12"

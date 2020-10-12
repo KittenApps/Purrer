@@ -12,10 +12,7 @@ export function getRealm() {
   return getUser.then(user => {
     realm = {
       user,
-      subsColl: app.services
-        .mongodb("mongodb-atlas")
-        .db("purrer")
-        .collection("subscriptions")
+      subsColl: user.mongoClient("mongodb-atlas").db("purrer").collection("subscriptions")
     };
     return realm;
   });

@@ -21,7 +21,7 @@
     "react-dom": "0.0.0-experimental-4ead6b530",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
-    "realm-web": "^0.8.1",
+    "realm-web": "^1.0.0-rc.1",
     "web-push": "^3.4.4",
     "webpack": "^4.44.2"
   },

@@ -15,6 +15,6 @@ module.exports = {
   defaultTheme: {
     primary: { main: "#043911" },
     secondary: { main: "#66d95e" },
-    type: "dark"
+    mode: "dark"
   }
 };

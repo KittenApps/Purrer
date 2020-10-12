@@ -69,7 +69,7 @@ function NotificationPreview(props) {
 
   const hcolor = {
     backgroundColor:
-      props.inverseTheme.palette.type === "dark" ? "#4f5835" : "#cfddaa"
+      props.inverseTheme.palette.mode === "dark" ? "#4f5835" : "#cfddaa"
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);

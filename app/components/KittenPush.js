@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { Paper } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
+import Skeleton from "@material-ui/core/Skeleton";
 import {
   createMuiTheme,
   ThemeProvider,
@@ -63,7 +63,7 @@ function KittenPush() {
         palette: {
           primary: { main: theme.palette.primary.main },
           secondary: { main: theme.palette.secondary.main },
-          type: theme.palette.type === "dark" ? "light" : "dark"
+          mode: theme.palette.mode === "dark" ? "light" : "dark"
         }
       }),
     [theme]
@@ -71,7 +71,7 @@ function KittenPush() {
 
   useEffect(() => {
     document.body.style.backgroundColor =
-      theme.palette.type === "light" ? "#fafafa" : "#303030";
+      theme.palette.mode === "light" ? "#fafafa" : "#303030";
   }, [theme]);
 
   // maybe I should have used Redux

@@ -10,8 +10,8 @@ import {
   Tooltip,
   Typography
 } from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import Autocomplete from "@material-ui/core/Autocomplete";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 import InvertColorsTwoToneIcon from "@material-ui/icons/InvertColorsTwoTone";
 import { getIdb } from "../util";
 import { getRealm } from "../realm";
@@ -33,9 +33,9 @@ const useStyles = makeStyles(theme => ({
   channel: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
+      backgroundColor: alpha(theme.palette.common.white, 0.25)
     },
     marginLeft: 0,
     width: "100%",

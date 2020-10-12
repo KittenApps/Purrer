@@ -16,7 +16,7 @@ import { defaultTheme, getIdb } from "../util";
 function CustomThemeDialog(props) {
   const [primColor, setPrimColor] = useState(props.theme.palette.primary.main);
   const [secColor, setSecColor] = useState(props.theme.palette.secondary.main);
-  const [darkMode, setDarkMode] = useState(props.theme.palette.type === "dark");
+  const [darkMode, setDarkMode] = useState(props.theme.palette.mode === "dark");
   if (!props.open) return null;
 
   const handleClose = () => props.setOpen(false);
@@ -28,7 +28,7 @@ function CustomThemeDialog(props) {
     const theme = {
       primary: { main: primColor },
       secondary: { main: secColor },
-      type: darkMode ? "dark" : "light"
+      mode: darkMode ? "dark" : "light"
     };
     getIdb()
       .then(db => db.put("settings", { id: "defaultTheme", theme }))
@@ -41,7 +41,7 @@ function CustomThemeDialog(props) {
   const handleReset = () => {
     setPrimColor(defaultTheme.primary.main);
     setSecColor(defaultTheme.secondary.main);
-    setDarkMode(defaultTheme.type === "dark");
+    setDarkMode(defaultTheme.mode === "dark");
     getIdb()
       .then(db => db.delete("settings", "defaultTheme"))
       .then(() => {
